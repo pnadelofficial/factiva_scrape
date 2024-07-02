@@ -54,10 +54,10 @@ for i in range(5):
         except TimeoutException:
             print("Timed out waiting for the element to be present.")
 
-        time.sleep(5)
-        dl_file = [f for f in os.listdir(home+'/Downloads/') if pattern.search(f)][0]
-        subprocess.run(['cp', home+'/Downloads/' + dl_file, './factiva_data/'])
-        subprocess.run(['rm', home+'/Downloads/' + dl_file])
+        time.sleep(10)
+        dl_file = [f for f in os.listdir(os.path.join(home, 'downloads')) if pattern.search(f)][0]
+        subprocess.run(['cp', os.path.join(home, 'downloads', dl_file), './factiva_data/'])
+        subprocess.run(['rm', os.path.join(home, 'downloads', dl_file)])
 
         time.sleep(5)
         element_present.click()
