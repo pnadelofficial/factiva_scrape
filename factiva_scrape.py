@@ -42,7 +42,7 @@ for i in range(5):
         
         wd.find_elements(By.CLASS_NAME, 'ppsBtn')[6].click()
         wd.find_elements(By.CLASS_NAME, 'ppsBtn')[6].click()
-        time.sleep(5)
+        time.sleep(10)
         wd.find_element(By.ID, 'listMenu-id-3').find_elements(By.TAG_NAME, 'a')[1].click()
 
         word_limit = (By.CLASS_NAME, 'dj_btn-blue-new')
