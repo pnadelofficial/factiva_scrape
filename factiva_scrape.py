@@ -42,7 +42,7 @@ for i in range(5):
         
         wd.find_elements(By.CLASS_NAME, 'ppsBtn')[6].click()
         wd.find_elements(By.CLASS_NAME, 'ppsBtn')[6].click()
-        time.sleep(10)
+        time.sleep(15)
         wd.find_element(By.ID, 'listMenu-id-3').find_elements(By.TAG_NAME, 'a')[1].click()
 
         word_limit = (By.CLASS_NAME, 'dj_btn-blue-new')
@@ -54,12 +54,12 @@ for i in range(5):
         except TimeoutException:
             print("Timed out waiting for the element to be present.")
 
-        # time.sleep(10)
+        time.sleep(15)
         # dl_file = [f for f in os.listdir(os.path.join(home, 'downloads')) if pattern.search(f)][0]
         # subprocess.run(['cp', os.path.join(home, 'downloads', dl_file), './factiva_data/'])
         # subprocess.run(['rm', os.path.join(home, 'downloads', dl_file)])
 
-        time.sleep(5)
+        time.sleep(10)
         element_present.click()
         time.sleep(10)
 
