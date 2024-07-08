@@ -22,8 +22,9 @@ wd.get('http://www.library.tufts.edu/ezproxy/ezproxy.asp?LOCATION=RsrcRcrdFactiv
 
 time.sleep(5)
 
+query = 'rst=grdn and AIDS'
 # Send keys
-wd.find_element(By.TAG_NAME, 'textarea').send_keys('rst=grdn and AIDS')
+wd.find_element(By.TAG_NAME, 'textarea').send_keys(query)
 
 # Click the search button
 wd.find_element(By.ID, 'btnSBSearch').click()
@@ -74,7 +75,7 @@ for i in range(5):
                 EC.presence_of_element_located(word_limit)
             )
             wl_element_present.click()  
-            time.sleep(20)
+            time.sleep(10)
         except TimeoutException:
             print("Word limit issue not present.")
             pass
