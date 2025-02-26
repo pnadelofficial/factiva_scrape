@@ -83,14 +83,14 @@ class Login:
         switch_factiva.click()
 
 class Scraper:
-    def __init__(self, query, timeout:int=10, restart:bool=False) -> None:
+    def __init__(self, query, timeout:int=10, save_every:int=10, restart:bool=False) -> None:
         login = Login(username, password)
         login()
 
         self.wd = login.wd
         self.query = query
         self.restart = restart
-
+        self.save_every = save_every
         self.timeout = timeout
         os.makedirs('./factiva_data', exist_ok=True)
 
@@ -258,7 +258,7 @@ class Scraper:
             self._recover()
             print("Recovered from last save")
 
-        self._parse_results()
+        self._parse_results(save_every=self.save_every)
         print("Parsed results")
 
         self._save(self.data, filename)
