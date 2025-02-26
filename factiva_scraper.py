@@ -159,7 +159,7 @@ class Scraper:
         d, m, y = last_date.split('-')
         self._input_date(d, m, y)
     
-    def _parse_results(self, save_every:int=10) -> List:
+    def _parse_results(self, save_every:int=10) -> List[Tuple[str,str,str]]:
         page_numbers = WebDriverWait(self.wd, self.timeout).until(
             EC.presence_of_element_located((By.CLASS_NAME, "css-lakely"))
         )
@@ -244,7 +244,7 @@ class Scraper:
         df.to_csv(filename, index=False)
         print("Data saved.")
 
-    def scrape(self, filename=None):
+    def scrape(self, filename=None) -> None:
         if not filename:
             filename = f'factiva_{self.query}.csv'
         
