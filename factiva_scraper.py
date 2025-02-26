@@ -8,12 +8,8 @@ import time
 import pandas as pd
 import glob
 import re
-import getpass
 from typing import List, Tuple
 import os
-
-username = input("Enter your username: ")
-password = getpass.getpass()
 
 class FactivaWebDriver:
     def __init__(self, options:List=[
@@ -66,12 +62,15 @@ class Login:
         )
         tufts_login_button.click()
 
-        skip_for_now_button = WebDriverWait(self.wd, timeout).until(
-            EC.presence_of_all_elements_located((By.XPATH, "//button[@type='button']"))
-        )[1]
-        skip_for_now_button.click()
+        try:
+            skip_for_now_button = WebDriverWait(self.wd, 2*timeout).until(
+                EC.presence_of_all_elements_located((By.XPATH, "//button[@type='button']"))
+            )[1]
+            skip_for_now_button.click()
+        except TimeoutException:
+            pass
 
-        trust_this_computer_button = WebDriverWait(self.wd, timeout).until(
+        trust_this_computer_button = WebDriverWait(self.wd, 2*timeout).until(
             EC.presence_of_element_located((By.XPATH, "//button[@id='trust-browser-button']"))
         )
         trust_this_computer_button.click()
@@ -83,7 +82,7 @@ class Login:
         switch_factiva.click()
 
 class Scraper:
-    def __init__(self, query, timeout:int=10, save_every:int=10, restart:bool=False) -> None:
+    def __init__(self, username, password, query, timeout:int=10, save_every:int=10, restart:bool=False) -> None:
         login = Login(username, password)
         login()
 
@@ -167,8 +166,8 @@ class Scraper:
 
         data = []
         current_date = None
+        print(f"Searching for {self.query}...")
         for i in range(int(max_pages)-1):
-            print(f"Page {i+1}/{max_pages}, Date: {current_date}, Articles collected: {len(data)}, Percent complete: {len(data)/int(max_pages)*100:.2f}%")
             try:
                 year_of_first_result_on_page = WebDriverWait(self.wd, 1.5*self.timeout).until(
                     EC.presence_of_element_located((By.CLASS_NAME, 'css-1tryk67'))
@@ -214,10 +213,9 @@ class Scraper:
                 next_page.click()
             except StaleElementReferenceException:
                 break
+            print(f"Page {i+1}/{max_pages} complete, Date: {current_date}, Articles collected: {len(data)}, Percent complete: {i+1/int(max_pages)*100:.2f}%")
 
-            print("Articles collected: ", len(data))
-
-            if i//save_every == 0:
+            if (i+1%save_every) == 0:
                 print("Saving intermediary data...")
                 df = pd.DataFrame(data, columns=['Title', 'Byline', 'Text'])
                 df.to_csv(f'./factiva_data/{self.query}_to_page_{i}.csv', index=False)
